@@ -24,6 +24,8 @@ class ConnectionMqtt():
         self.client.connect(self.broker, self.port)
 
     def subscribe(self, topic):
+        self.connect_mqtt()
+
         def on_message(client, userdata, msg):
             print(
                 f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
@@ -39,5 +41,5 @@ class ConnectionMqtt():
 
 test = ConnectionMqtt("henry", "broker.mqttdashboard.com", 1883)
 test.publish("test/mqtt", "yo")
-test.connect_mqtt()
+
 test.subscribe("test/mqtt")
