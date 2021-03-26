@@ -2,23 +2,25 @@ import paho.mqtt.client as mqtt
 import time
 
 
-def on_connect(client, userdata, flags, rc):
-    if rc == 0:
-        print("yoy")
-    else:
-        print("pas yay", rc)
+class ConnectionMqtt():
+    def __init__(self, nomUtilisateur):
+        broker = "broker.mqttdashboard.com"
+        port = 1883
+
+        self.client = mqtt.Client(nomUtilisateur)
+        self.client.on_connect = self.on_connect
+
+        self.client.connect(broker, port=port)
+
+    def publish(self, message):
+        self.client.publish("test/mqtt", message)
+
+    def on_connect(client, userdata, flags, rc):
+        if rc == 0:
+            print("yoy")
+        else:
+            print("pas yay", rc)
 
 
-broker = "broker.mqttdashboard.com"
-port = 1883
-
-client = mqtt.Client("python1")
-client.on_connect = on_connect
-
-client.loop_start()
-
-client.connect(broker, port=port)
-client.publish("test/mqtt", "saint-simonaque")
-
-client.loop_stop()
-client.disconnect()
+test2 = ConnectionMqtt("henry")
+test2.publish("test3")
