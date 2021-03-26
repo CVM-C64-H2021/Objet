@@ -32,6 +32,10 @@ class ConnectionMqtt():
         self.client.on_message = on_message
         self.client.loop_forever()
 
+    def closeConnect(self):
+        self.client.disconnect()
+        self.client.loop_stop()
+
 
 test = ConnectionMqtt("henry", "broker.mqttdashboard.com", 1883)
 test.publish("test/mqtt", "yo")
