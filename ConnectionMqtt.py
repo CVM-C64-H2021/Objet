@@ -1,23 +1,39 @@
+import paho.mqtt.publish as publish
 import paho.mqtt.client as mqtt
 import time
 
 
 class ConnectionMqtt():
-    def __init__(self, nomUtilisateur):
-        broker = "broker.mqttdashboard.com"
-        port = 1883
+    def __init__(self, nomUtilisateur, broker, port):
+        self.broker = broker
+        self.port = port
+        self.nom = nomUtilisateur
 
-        self.client = mqtt.Client(nomUtilisateur)
-        self.client.on_connect = self.on_connect
-        self.client.connect(broker, port=port)
+    def publish(self, topic, message):
+        publish.single(topic, message, hostname=self.broker)
 
-    def publish(self, message):
-        self.client.publish("test/mqtt", message, qos=0, retain=False)
+    def connect_mqtt(self) -> mqtt:
+        def on_connect(client, userdata, flags, rc):
+            if rc == 0:
+                print("Connected to MQTT Broker!")
+            else:
+                print("Failed to connect, return code %d\n", rc)
+
+        self.client = mqtt.Client(self.nom)
+        self.client.on_connect = on_connect
+        self.client.connect(self.broker, self.port)
+
+    def subscribe(self, topic):
+        def on_message(client, userdata, msg):
+            print(
+                f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
+
+        self.client.subscribe(topic)
+        self.client.on_message = on_message
         self.client.loop_forever()
 
-    def on_connect(self, client, userdata, flags, rc):
-        print(f"Connected with result code {rc}")
 
-
-test2 = ConnectionMqtt("henry")
-test2.publish("test3")
+test = ConnectionMqtt("henry", "broker.mqttdashboard.com", 1883)
+test.publish("test/mqtt", "yo")
+test.connect_mqtt()
+test.subscribe("test/mqtt")
