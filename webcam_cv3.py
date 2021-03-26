@@ -1,15 +1,19 @@
 import cv2
-import sys
 import logging as log
 import datetime as dt
 from time import sleep
+import os
 
 cascPath = "haarcascade_frontalface_default.xml"
 faceCascade = cv2.CascadeClassifier(cascPath)
 log.basicConfig(filename='webcam.log',level=log.INFO)
 
+path, dirs, files = next(os.walk(".\Faces"))
+file_count = len(files)
+
 video_capture = cv2.VideoCapture(0)
-anterior = 0
+img_counter = file_count
+timer = None
 
 while True:
     if not video_capture.isOpened():
@@ -33,17 +37,31 @@ while True:
     for (x, y, w, h) in faces:
         cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
-    if anterior != len(faces):
-        anterior = len(faces)
-        log.info("faces: "+str(len(faces))+" at "+str(dt.datetime.now()))
-
-
     # Display the resulting frame
     cv2.imshow('Video', frame)
 
+    k = cv2.waitKey(1)
 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    if k%256 == 27:
+        #ESC TO QUIT
         break
+    
+    if len(faces) > 0 and timer == None:
+        timer = dt.datetime.now()
+    
+    if len(faces) > 0 and timer != None:
+        timerCounter = dt.datetime.now()
+        diff = timerCounter - timer
+        
+        if diff.seconds >= 5.0:
+            img_name = "face_{}.png".format(img_counter)
+            cv2.imwrite("Faces/" + img_name, frame)
+            img_counter += 1
+            timer = None
+            log.info("img: " + img_name + " at "+str(dt.datetime.now()))
+    
+    if len(faces) == 0:
+        timer = None
 
     # Display the resulting frame
     cv2.imshow('Video', frame)
