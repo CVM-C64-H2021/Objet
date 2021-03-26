@@ -59,6 +59,7 @@ while True:
             img_counter += 1
             timer = None
             log.info("img: " + img_name + " at "+str(dt.datetime.now()))
+            print("picture taken")
     
     if len(faces) == 0:
         timer = None
