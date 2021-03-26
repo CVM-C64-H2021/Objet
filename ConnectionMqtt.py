@@ -9,17 +9,14 @@ class ConnectionMqtt():
 
         self.client = mqtt.Client(nomUtilisateur)
         self.client.on_connect = self.on_connect
-
         self.client.connect(broker, port=port)
 
     def publish(self, message):
-        self.client.publish("test/mqtt", message)
+        self.client.publish("test/mqtt", message, qos=0, retain=False)
+        self.client.loop_forever()
 
-    def on_connect(client, userdata, flags, rc):
-        if rc == 0:
-            print("yoy")
-        else:
-            print("pas yay", rc)
+    def on_connect(self, client, userdata, flags, rc):
+        print(f"Connected with result code {rc}")
 
 
 test2 = ConnectionMqtt("henry")
