@@ -1,19 +1,24 @@
 import paho.mqtt.client as mqtt
 import time
 
-connected = False
-messageOk = False
+def on_connect(client,userdata,flags,rc):
+    if rc==0:
+        print("yoy")
+    else:
+        print("pas yay", rc)
+
 
 
 broker = "broker.mqttdashboard.com"
 port = 1883
 
 client = mqtt.Client("python1")
+client.on_connect = on_connect
 
-print("yooooo", client)
+client.loop_start()
 
 client.connect(broker, port=port)
-client.loop_start()
 client.publish("testlashit", "woot")
+
 client.loop_stop()
 client.disconnect()
