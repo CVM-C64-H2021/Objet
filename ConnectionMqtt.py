@@ -1,6 +1,7 @@
 import paho.mqtt.publish as publish
 import paho.mqtt.client as mqtt
 import time
+import base64
 
 
 class ConnectionMqtt():
@@ -38,7 +39,7 @@ class ConnectionMqtt():
         self.client.disconnect()
         self.client.loop_stop()
 
-
-#test = ConnectionMqtt("henry", "broker.mqttdashboard.com", 1883)
-#test.publish("test/mqtt", "yo")
-# test.subscribe("test/mqtt")
+    def envoyerImage(self, topic, image):
+        with open(image, "rb") as imgFile:
+            myString = base64.b64encode(imgFile.read())
+        self.publish(topic, myString)
