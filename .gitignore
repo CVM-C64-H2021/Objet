@@ -2,3 +2,4 @@
 .project
 .pydevproject
 __pycache__/ConnectionMqtt.cpython-38.pyc
+__pycache__/CameraDAO.cpython-38.pyc

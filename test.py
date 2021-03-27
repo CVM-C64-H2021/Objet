@@ -1,21 +1,8 @@
-import cv2
+from CameraDAO import *
 from ConnectionMqtt import *
 
-
-def prendrePhoto():
-    # Prise d'une image a partir de la webcam
-    videoCaptureObject = cv2.VideoCapture(0)
-    result = True
-    while(result):
-        ret, frame = videoCaptureObject.read()
-        # Creation de l'image en jpg dans le dossier present
-        cv2.imwrite("NewPicture.jpg", frame)
-        result = False
-    videoCaptureObject.release()
-    cv2.destroyAllWindows()
-
-
-prendrePhoto()
+camera = CameraDAO()
+camera.prendrePhoto()
 # print(conversionImage("NewPicture.jpg"))
 controleur = ConnectionMqtt("henry", "broker.mqttdashboard.com", 1883)
 # print(controleur)
