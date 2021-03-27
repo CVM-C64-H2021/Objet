@@ -39,7 +39,6 @@ class ConnectionMqtt():
         self.client.loop_stop()
 
 
-test = ConnectionMqtt("henry", "broker.mqttdashboard.com", 1883)
-test.publish("test/mqtt", "yo")
-
-test.subscribe("test/mqtt")
+#test = ConnectionMqtt("henry", "broker.mqttdashboard.com", 1883)
+#test.publish("test/mqtt", "yo")
+# test.subscribe("test/mqtt")
