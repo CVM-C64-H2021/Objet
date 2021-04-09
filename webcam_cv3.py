@@ -3,10 +3,11 @@ import logging as log
 import datetime as dt
 from time import sleep
 import os
+from ConnectionMqtt import *
 
 cascPath = "haarcascade_frontalface_default.xml"
 faceCascade = cv2.CascadeClassifier(cascPath)
-log.basicConfig(filename='webcam.log',level=log.INFO)
+log.basicConfig(filename='webcam.log', level=log.INFO)
 
 path, dirs, files = next(os.walk(".\Faces"))
 file_count = len(files)
@@ -42,25 +43,27 @@ while True:
 
     k = cv2.waitKey(1)
 
-    if k%256 == 27:
-        #ESC TO QUIT
+    if k % 256 == 27:
+        # ESC TO QUIT
         break
-    
+
     if len(faces) > 0 and timer == None:
         timer = dt.datetime.now()
-    
+
     if len(faces) > 0 and timer != None:
         timerCounter = dt.datetime.now()
         diff = timerCounter - timer
-        
+
         if diff.seconds >= 5.0:
             img_name = "face_{}.png".format(img_counter)
             cv2.imwrite("Faces/" + img_name, frame)
+            mqtt = ConnectionMqtt("henry", "broker.mqttdashboard.com", 1883)
+            mqtt.envoyerImage("test/mqtt", "Faces/" + img_name)
             img_counter += 1
             timer = None
             log.info("img: " + img_name + " at "+str(dt.datetime.now()))
             print("picture taken")
-    
+
     if len(faces) == 0:
         timer = None
 
