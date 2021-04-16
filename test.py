@@ -1,7 +1,7 @@
 from CameraDAO import *
-from ConnectionMqtt import *
+from cloudMQTT import *
 
-camera = CameraDAO()
-camera.prendrePhoto()
-mqtt = ConnectionMqtt("henry", "broker.mqttdashboard.com", 1883)
-mqtt.envoyerImage("test/mqtt", "NewPicture.jpg")
+#camera = CameraDAO()
+#camera.prendrePhoto()
+mqtt = connectionMQTT()
+mqtt.publish("NewPicture.jpg")

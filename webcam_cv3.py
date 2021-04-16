@@ -57,8 +57,8 @@ while True:
         if diff.seconds >= 5.0:
             img_name = "face_{}.png".format(img_counter)
             cv2.imwrite("Faces/" + img_name, frame)
-            #mqtt = ConnectionMqtt("henry", "broker.mqttdashboard.com", 1883)
-            #mqtt.envoyerImage("test/mqtt", "Faces/" + img_name)
+            mqtt = ConnectionMqtt('mqtt://ghhtzpps:MwVNHJbYYirC@driver-01.cloudmqtt.com:18760', '/C64/Projet/Equipe1/Capteur')
+            mqtt.publish("ALERTE")
             img_counter += 1
             timer = None
             log.info("img: " + img_name + " at "+str(dt.datetime.now()))
