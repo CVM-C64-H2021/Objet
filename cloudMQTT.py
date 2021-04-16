@@ -1,5 +1,7 @@
 import paho.mqtt.client as mqtt
-import os, urllib.parse
+import os, urllib.parse, os.path
+import json
+import base64
 
 class connectionMQTT():
 
@@ -21,8 +23,25 @@ class connectionMQTT():
         # Start subscribe, with QoS level 0
         self.mqttc.subscribe(self.topic, 0)
 
-    def publish(self, message):
+    def publish(self,image, date):
         # Publish a message
+
+        #with open(image, "rb") as imgFile:
+        #    imageBase64 = base64.b64encode(imgFile.read())
+
+        faceDict = {}
+        faceDict["id"] = 123
+        faceDict["date"] = date
+        faceDict["type"] = "Detection du visage"
+        faceDict["valeur"] = base64.b64encode(image).decode("utf-8")
+        faceDict["alerte"] = 1
+        faceDict["messageAlerte"] = "Cette personne a voulu manger vos biscuits!!!"
+
+        f = open("test.txt", "w")
+        f.write(str(base64.b64encode(image).decode("utf-8")))
+        f.close()
+        message = json.dumps(faceDict)
+
         self.mqttc.publish(self.topic, message)
 
     # Continue the network loop, exit when an error occurs

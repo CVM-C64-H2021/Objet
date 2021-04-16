@@ -3,7 +3,8 @@ import logging as log
 import datetime as dt
 from time import sleep
 import os
-from ConnectionMqtt import *
+from cloudMQTT import *
+import json
 
 cascPath = "haarcascade_frontalface_default.xml"
 faceCascade = cv2.CascadeClassifier(cascPath)
@@ -15,6 +16,8 @@ file_count = len(files)
 video_capture = cv2.VideoCapture(0)
 img_counter = file_count
 timer = None
+
+
 
 while True:
     if not video_capture.isOpened():
@@ -57,8 +60,8 @@ while True:
         if diff.seconds >= 5.0:
             img_name = "face_{}.png".format(img_counter)
             cv2.imwrite("Faces/" + img_name, frame)
-            mqtt = ConnectionMqtt('mqtt://ghhtzpps:MwVNHJbYYirC@driver-01.cloudmqtt.com:18760', '/C64/Projet/Equipe1/Capteur')
-            mqtt.publish("ALERTE")
+            mqtt = connectionMQTT('mqtt://ghhtzpps:MwVNHJbYYirC@driver-01.cloudmqtt.com:18760', '/C64/Projet/Equipe1/Capteur')
+            mqtt.publish(frame, str(dt.datetime.now()))
             img_counter += 1
             timer = None
             log.info("img: " + img_name + " at "+str(dt.datetime.now()))
