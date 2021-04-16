@@ -23,6 +23,12 @@ class connectionMQTT():
 
         # Start subscribe, with QoS level 0
         self.mqttc.subscribe(self.topic, 0)
+        self.mqttc.on_message = self.on_message
+
+        # Continue the network loop, exit when an error occurs
+        rc = 0
+        while rc == 0:
+            rc = self.mqttc.loop()
 
     def publish(self,image, date):
         # Publish a message
@@ -39,8 +45,9 @@ class connectionMQTT():
 
         self.mqttc.publish(self.topic, message)
 
-    # Continue the network loop, exit when an error occurs
-    #rc = 0
-    #while rc == 0:
-    #    rc = mqttc.loop()
-    #print("rc: " + str(rc))
+    def on_message(self, client, obj, msg):
+        message = json.dumps(msg.payload.decode("utf-8"))
+        print(type(json.loads(message))) ##### string?
+
+
+mqtt = connectionMQTT('mqtt://ghhtzpps:MwVNHJbYYirC@driver-01.cloudmqtt.com:18760', '/C64/Projet/Equipe1/Capteur')
