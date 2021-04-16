@@ -26,9 +26,6 @@ class connectionMQTT():
     def publish(self,image, date):
         # Publish a message
 
-        #with open(image, "rb") as imgFile:
-        #    imageBase64 = base64.b64encode(imgFile.read())
-
         faceDict = {}
         faceDict["id"] = 123
         faceDict["date"] = date
@@ -37,9 +34,11 @@ class connectionMQTT():
         faceDict["alerte"] = 1
         faceDict["messageAlerte"] = "Cette personne a voulu manger vos biscuits!!!"
 
+        #test
         f = open("test.txt", "w")
         f.write(str(base64.b64encode(image).decode("utf-8")))
         f.close()
+
         message = json.dumps(faceDict)
 
         self.mqttc.publish(self.topic, message)
