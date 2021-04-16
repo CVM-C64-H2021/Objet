@@ -27,11 +27,6 @@ class connectionMQTT():
     def publish(self,image, date):
         # Publish a message
 
-        dsize = (width, height)
-
-        # resize image
-        output = cv2.resize(src, dsize) 
-
         faceDict = {}
         faceDict["id"] = 123
         faceDict["date"] = date

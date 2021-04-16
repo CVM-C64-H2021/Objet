@@ -58,6 +58,11 @@ while True:
         diff = timerCounter - timer
 
         if diff.seconds >= 5.0:
+            
+            dsize = (320, 240)
+            # resize image
+            frame = cv2.resize(frame, dsize) 
+
             img_name = "face_{}.png".format(img_counter)
             cv2.imwrite("Faces/" + img_name, frame)
             mqtt = connectionMQTT('mqtt://ghhtzpps:MwVNHJbYYirC@driver-01.cloudmqtt.com:18760', '/C64/Projet/Equipe1/Capteur')
