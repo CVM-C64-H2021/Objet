@@ -2,6 +2,7 @@ import paho.mqtt.client as mqtt
 import os, urllib.parse, os.path
 import json
 import base64
+import cv2
 
 class connectionMQTT():
 
@@ -26,18 +27,18 @@ class connectionMQTT():
     def publish(self,image, date):
         # Publish a message
 
+        dsize = (width, height)
+
+        # resize image
+        output = cv2.resize(src, dsize) 
+
         faceDict = {}
         faceDict["id"] = 123
         faceDict["date"] = date
-        faceDict["type"] = "Detection du visage"
+        faceDict["type"] = "image"
         faceDict["valeur"] = base64.b64encode(image).decode("utf-8")
         faceDict["alerte"] = 1
         faceDict["messageAlerte"] = "Cette personne a voulu manger vos biscuits!!!"
-
-        #test
-        f = open("test.txt", "w")
-        f.write(str(base64.b64encode(image).decode("utf-8")))
-        f.close()
 
         message = json.dumps(faceDict)
 
