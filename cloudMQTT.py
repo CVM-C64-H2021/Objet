@@ -30,7 +30,7 @@ mqttc.on_subscribe = on_subscribe
 # Parse CLOUDMQTT_URL (or fallback to localhost)
 url_str = os.environ.get('CLOUDMQTT_URL', 'mqtt://ghhtzpps:MwVNHJbYYirC@driver-01.cloudmqtt.com:18760')
 url = urllib.parse.urlparse(url_str)
-topic = url.path[1:] or '/C64/Security_Camera'
+topic = url.path[1:] or '/C64/Projet/Equipe1/Capteur'
 
 # Connect
 mqttc.username_pw_set(url.username, url.password)
