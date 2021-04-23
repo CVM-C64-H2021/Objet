@@ -64,12 +64,11 @@ while True:
             # resize image
             frame = cv2.resize(frame, dsize) 
 
-            recognition = face_rec.classify_face(frame)
-
+            numberOfRecognition = classify_face(frame)
             img_name = "face_{}.png".format(img_counter)
             cv2.imwrite("Faces/" + img_name, frame)
             mqtt = connectionMQTT('mqtt://ghhtzpps:MwVNHJbYYirC@driver-01.cloudmqtt.com:18760', '/C64/Projet/Equipe1/Capteur')
-            mqtt.publish(frame, str(dt.datetime.now()))
+            mqtt.publish(frame, str(dt.datetime.now()), numberOfRecognition)
             img_counter += 1
             timer = None
             log.info("img: " + img_name + " at "+str(dt.datetime.now()))

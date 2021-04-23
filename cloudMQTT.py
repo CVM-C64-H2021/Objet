@@ -1,4 +1,4 @@
-import paho.mqtt.client as mqtt
+import paho.mqtt.client as paho
 import os, urllib.parse, os.path
 import json
 import base64
@@ -7,7 +7,7 @@ import cv2
 class connectionMQTT():
 
     def __init__(self, url, topic):
-        self.mqttc = mqtt.Client()
+        self.mqttc = paho.Client()
         
         # Parse CLOUDMQTT_URL (or fallback to localhost)
         self.url_str = os.environ.get('CLOUDMQTT_URL', url)
@@ -23,14 +23,14 @@ class connectionMQTT():
 
         # Start subscribe, with QoS level 0
         self.mqttc.subscribe(self.topic, 0)
-        self.mqttc.on_message = self.on_message
+        #self.mqttc.on_message = self.on_message
+#
+        ## Continue the network loop, exit when an error occurs
+        #rc = 0
+        #while rc == 0:
+        #    rc = self.mqttc.loop()
 
-        # Continue the network loop, exit when an error occurs
-        rc = 0
-        while rc == 0:
-            rc = self.mqttc.loop()
-
-    def publish(self,image, date):
+    def publish(self,image, date, numberOfRecognition):
         # Publish a message
 
         faceDict = {}
@@ -39,8 +39,12 @@ class connectionMQTT():
         faceDict["type"] = "image"
         faceDict["valeur"] = base64.b64encode(image).decode("utf-8")
         faceDict["alerte"] = 1
-        faceDict["messageAlerte"] = "Cette personne a voulu manger vos biscuits!!!"
 
+        if numberOfRecognition == 0:
+            faceDict["messageAlerte"] = "Cette personne a voulu manger vos biscuits!!!"
+        else:
+            faceDict["messageAlerte"] = "Cette personne a voulu manger vos biscuits!!! C'est la " + str(numberOfRecognition + 1) + "eme fois!!!"
+        print(faceDict["messageAlerte"])
         message = json.dumps(faceDict)
 
         self.mqttc.publish(self.topic, message)
