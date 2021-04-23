@@ -5,6 +5,7 @@ from time import sleep
 import os
 from cloudMQTT import *
 import json
+from face_rec import *
 
 cascPath = "haarcascade_frontalface_default.xml"
 faceCascade = cv2.CascadeClassifier(cascPath)
@@ -62,6 +63,8 @@ while True:
             dsize = (320, 240)
             # resize image
             frame = cv2.resize(frame, dsize) 
+
+            recognition = face_rec.classify_face(frame)
 
             img_name = "face_{}.png".format(img_counter)
             cv2.imwrite("Faces/" + img_name, frame)
