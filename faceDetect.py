@@ -78,7 +78,7 @@ class FaceDetect:
                     img_name = "face_{}.png".format(img_counter)
                     cv2.imwrite("Faces/" + img_name, gray)
 
-                    imageDAO.saveImage(img_name, frame)
+                   # imageDAO.saveImage(img_name, frame)
 
                     self.mqtt.publish(frame, str(dt.datetime.now()),
                                       numberOfRecognition)
