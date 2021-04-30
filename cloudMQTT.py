@@ -1,14 +1,17 @@
 import paho.mqtt.client as paho
-import os, urllib.parse, os.path
+import os
+import urllib.parse
+import os.path
 import json
 import base64
 import cv2
 
-class connectionMQTT():
+
+class ConnectionMQTT():
 
     def __init__(self, url, topic):
         self.mqttc = paho.Client()
-        
+
         # Parse CLOUDMQTT_URL (or fallback to localhost)
         self.url_str = os.environ.get('CLOUDMQTT_URL', url)
         self.url = urllib.parse.urlparse(self.url_str)
@@ -25,12 +28,12 @@ class connectionMQTT():
         self.mqttc.subscribe(self.topic, 0)
         #self.mqttc.on_message = self.on_message
 #
-        ## Continue the network loop, exit when an error occurs
+        # Continue the network loop, exit when an error occurs
         #rc = 0
-        #while rc == 0:
+        # while rc == 0:
         #    rc = self.mqttc.loop()
 
-    def publish(self,image, date, numberOfRecognition):
+    def publish(self, image, date, numberOfRecognition):
         # Publish a message
 
         faceDict = {}
@@ -43,7 +46,8 @@ class connectionMQTT():
         if numberOfRecognition == 0:
             faceDict["messageAlerte"] = "Cette personne a voulu manger vos biscuits!!!"
         else:
-            faceDict["messageAlerte"] = "Cette personne a voulu manger vos biscuits!!! C'est la " + str(numberOfRecognition + 1) + "eme fois!!!"
+            faceDict["messageAlerte"] = "Cette personne a voulu manger vos biscuits!!! C'est la " + \
+                str(numberOfRecognition + 1) + "eme fois!!!"
         print(faceDict["messageAlerte"])
         message = json.dumps(faceDict)
 
@@ -51,7 +55,4 @@ class connectionMQTT():
 
     def on_message(self, client, obj, msg):
         message = json.dumps(msg.payload.decode("utf-8"))
-        print(type(json.loads(message))) ##### string?
-
-
-mqtt = connectionMQTT('mqtt://ghhtzpps:MwVNHJbYYirC@driver-01.cloudmqtt.com:18760', '/C64/Projet/Equipe1/Capteur')
+        print(type(json.loads(message)))  # string?
