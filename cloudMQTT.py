@@ -31,7 +31,7 @@ class ConnectionMQTT():
         # Publish a message
 
         faceDict = {}
-        faceDict["idApp"] = 123
+        faceDict["id"] = 123
         faceDict["date"] = date
         faceDict["type"] = "image"
         faceDict["valeur"] = base64.b64encode(image).decode("utf-8")

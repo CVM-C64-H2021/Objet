@@ -30,7 +30,10 @@ INFO:root:img: face_13.png at 2021-04-30 08:39:58.114590
 INFO:root:img: face_14.png at 2021-04-30 08:42:23.846365
 INFO:root:img: face_15.png at 2021-04-30 08:43:02.620794
 INFO:root:img: face_16.png at 2021-04-30 08:43:56.972699
+<<<<<<< HEAD
 INFO:root:img: face_3.png at 2021-04-30 08:58:26.714339
 INFO:root:img: face_4.png at 2021-04-30 08:58:34.112379
 INFO:root:img: face_5.png at 2021-04-30 09:00:28.774982
 INFO:root:img: face_3.png at 2021-04-30 09:26:07.445508
+=======
+>>>>>>> parent of e94d6fb (Small fix in json)
