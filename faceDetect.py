@@ -8,6 +8,7 @@ import json
 from face_rec import *
 import numpy as np
 from imageDAO import imageDAO
+import base64
 
 
 class FaceDetect:
@@ -15,10 +16,27 @@ class FaceDetect:
         self.faceRec = FaceRec()
         self.cascPath = "haarcascade_frontalface_default.xml"
         self.faceCascade = cv2.CascadeClassifier(self.cascPath)
+        self.imageDAO = imageDAO()
         self.mqtt = ConnectionMQTT(
             'mqtt://ghhtzpps:MwVNHJbYYirC@driver-01.cloudmqtt.com:18760', '/C64/Projet/Equipe1/Capteur')
 
+    def getImagesDB(self):
+        images = self.imageDAO.getAllImages()
+
+        if len(images) > 0:
+            for image in images:
+                idValue = list(image.keys())
+                imageValue = list(image.values())
+
+                imageData = base64.b64decode(imageValue[1])
+                imageNP = np.fromstring(imageData, dtype = np.uint8)
+                picture = cv2.imdecode(imageNP, cv2.IMREAD_UNCHANGED)
+                print(type(picture))
+                cv2.imwrite("Faces/face_" + idValue[1] + ".png", picture)
+
     def cameraSecurite(self):
+        self.getImagesDB()
+
         log.basicConfig(filename='webcam.log', level=log.INFO)
 
         path, dirs, files = next(os.walk(".\Faces"))
@@ -78,7 +96,11 @@ class FaceDetect:
                     img_name = "face_{}.png".format(img_counter)
                     cv2.imwrite("Faces/" + img_name, gray)
 
+<<<<<<< Updated upstream
                    # imageDAO.saveImage(img_name, frame)
+=======
+                    self.imageDAO.saveImage(frame)
+>>>>>>> Stashed changes
 
                     self.mqtt.publish(frame, str(dt.datetime.now()),
                                       numberOfRecognition)
