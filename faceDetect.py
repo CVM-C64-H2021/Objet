@@ -14,6 +14,8 @@ class FaceDetect:
         self.faceRec = FaceRec()
         self.cascPath = "haarcascade_frontalface_default.xml"
         self.faceCascade = cv2.CascadeClassifier(self.cascPath)
+        self.mqtt = ConnectionMQTT(
+            'mqtt://ghhtzpps:MwVNHJbYYirC@driver-01.cloudmqtt.com:18760', '/C64/Projet/Equipe1/Capteur')
 
     def cameraSecurite(self):
         log.basicConfig(filename='webcam.log', level=log.INFO)
@@ -74,10 +76,8 @@ class FaceDetect:
                     numberOfRecognition = self.faceRec.classify_face(frame)
                     img_name = "face_{}.png".format(img_counter)
                     cv2.imwrite("Faces/" + img_name, gray)
-                    mqtt = connectionMQTT(
-                        'mqtt://ghhtzpps:MwVNHJbYYirC@driver-01.cloudmqtt.com:18760', '/C64/Projet/Equipe1/Capteur')
-                    mqtt.publish(frame, str(dt.datetime.now()),
-                                 numberOfRecognition)
+                    self.mqtt.publish(frame, str(dt.datetime.now()),
+                                      numberOfRecognition)
                     img_counter += 1
                     timer = None
                     log.info("img: " + img_name + " at " +
