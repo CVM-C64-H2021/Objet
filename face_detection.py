@@ -6,6 +6,7 @@ import os
 from cloudMQTT import *
 import json
 from face_rec import *
+import numpy as np
 
 cascPath = "haarcascade_frontalface_default.xml"
 faceCascade = cv2.CascadeClassifier(cascPath)
@@ -63,6 +64,7 @@ while True:
             dsize = (320, 240)
             # resize image
             frame = cv2.resize(frame, dsize) 
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
             numberOfRecognition = classify_face(frame)
             img_name = "face_{}.png".format(img_counter)
