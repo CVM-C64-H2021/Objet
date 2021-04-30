@@ -8,6 +8,8 @@ import json
 from face_rec import *
 import numpy as np
 
+faceRec = FaceRec()
+
 cascPath = "haarcascade_frontalface_default.xml"
 faceCascade = cv2.CascadeClassifier(cascPath)
 log.basicConfig(filename='webcam.log', level=log.INFO)
@@ -18,7 +20,6 @@ file_count = len(files)
 video_capture = cv2.VideoCapture(0)
 img_counter = file_count
 timer = None
-
 
 
 while True:
@@ -60,14 +61,14 @@ while True:
         diff = timerCounter - timer
 
         if diff.seconds >= 5.0:
-            
+
             dsize = (320, 240)
             # resize image
             frame = cv2.resize(frame, dsize)
             
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-            numberOfRecognition = classify_face(frame)
+            numberOfRecognition = faceRec.classify_face(frame)
             img_name = "face_{}.png".format(img_counter)
             cv2.imwrite("Faces/" + img_name, gray)
             mqtt = connectionMQTT('mqtt://ghhtzpps:MwVNHJbYYirC@driver-01.cloudmqtt.com:18760', '/C64/Projet/Equipe1/Capteur')
