@@ -7,6 +7,7 @@ from cloudMQTT import *
 import json
 from face_rec import *
 import numpy as np
+from imageDAO import imageDAO
 
 
 class FaceDetect:
@@ -76,6 +77,9 @@ class FaceDetect:
                     numberOfRecognition = self.faceRec.classify_face(frame)
                     img_name = "face_{}.png".format(img_counter)
                     cv2.imwrite("Faces/" + img_name, gray)
+
+                    imageDAO.saveImage(img_name, frame)
+
                     self.mqtt.publish(frame, str(dt.datetime.now()),
                                       numberOfRecognition)
                     img_counter += 1

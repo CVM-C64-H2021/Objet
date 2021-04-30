@@ -26,12 +26,6 @@ class ConnectionMQTT():
 
         # Start subscribe, with QoS level 0
         self.mqttc.subscribe(self.topic, 0)
-        #self.mqttc.on_message = self.on_message
-#
-        # Continue the network loop, exit when an error occurs
-        #rc = 0
-        # while rc == 0:
-        #    rc = self.mqttc.loop()
 
     def publish(self, image, date, numberOfRecognition):
         # Publish a message
@@ -52,7 +46,3 @@ class ConnectionMQTT():
         message = json.dumps(faceDict)
 
         self.mqttc.publish(self.topic, message)
-
-    def on_message(self, client, obj, msg):
-        message = json.dumps(msg.payload.decode("utf-8"))
-        print(type(json.loads(message)))  # string?
