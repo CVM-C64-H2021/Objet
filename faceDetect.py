@@ -87,7 +87,7 @@ class FaceDetect:
                 timerCounter = dt.datetime.now()
                 diff = timerCounter - timer
 
-                if diff.seconds >= 5.0:
+                if diff.seconds >= 10.0:
 
                     dsize = (320, 240)
                     # resize image
@@ -96,11 +96,10 @@ class FaceDetect:
                     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
                     numberOfRecognition = self.faceRec.classify_face(frame)
-                    img_name = "face_{}.jpg".format(img_counter)
+                    img_name = "face_{}.jpg".format(img_counter+1)
                     cv2.imwrite("Faces/" + img_name, gray)
 
                     img = cv2.imencode('.jpg', gray)[1].tostring()
-
                     self.imageDAO.saveImage(img)
                     self.mqtt.publish(img, str(dt.datetime.now()),
                                       numberOfRecognition)
