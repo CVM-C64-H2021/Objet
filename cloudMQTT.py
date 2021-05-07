@@ -31,16 +31,11 @@ class ConnectionMQTT():
         # Publish a message
 
         faceDict = {}
-<<<<<<< Updated upstream
-        faceDict["id"] = 321
-        faceDict["idApp"] = 123
-=======
         faceDict["id"] = 123
         faceDict["idApp"] = 456
->>>>>>> Stashed changes
         faceDict["date"] = date
         faceDict["type"] = "image"
-        faceDict["valeur"] = base64.b64encode(image).decode("utf-8")
+        faceDict["valeur"] = str(base64.b64encode(image))
         faceDict["alerte"] = 1
 
         if numberOfRecognition == 0:

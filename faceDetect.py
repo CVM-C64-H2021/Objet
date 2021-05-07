@@ -1,5 +1,4 @@
 import cv2
-import logging as log
 import datetime as dt
 from time import sleep
 import os
@@ -9,6 +8,9 @@ from face_rec import *
 import numpy as np
 from imageDAO import imageDAO
 import base64
+from PIL import Image
+from io import BytesIO
+import glob
 
 
 class FaceDetect:
@@ -21,6 +23,10 @@ class FaceDetect:
             'mqtt://ghhtzpps:MwVNHJbYYirC@driver-01.cloudmqtt.com:18760', '/C64/Projet/Equipe1/Capteur')
 
     def getImagesDB(self):
+        files = glob.glob("Faces/*")
+        for f in files:
+            os.remove(f)
+
         images = self.imageDAO.getAllImages()
 
         if len(images) > 0:
@@ -29,15 +35,12 @@ class FaceDetect:
                 imageValue = list(image.values())
 
                 imageData = base64.b64decode(imageValue[1])
-                imageNP = np.fromstring(imageData, dtype = np.uint8)
-                picture = cv2.imdecode(imageNP, cv2.IMREAD_UNCHANGED)
-                print(type(picture))
-                cv2.imwrite("Faces/face_" + idValue[1] + ".png", picture)
+                bImg = BytesIO(imageData)
+                img = Image.open(bImg)
+                img.save("Faces/face_" + idValue[1] + ".jpg", "JPEG")
 
     def cameraSecurite(self):
         self.getImagesDB()
-
-        log.basicConfig(filename='webcam.log', level=log.INFO)
 
         path, dirs, files = next(os.walk(".\Faces"))
         file_count = len(files)
@@ -93,21 +96,16 @@ class FaceDetect:
                     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
                     numberOfRecognition = self.faceRec.classify_face(frame)
-                    img_name = "face_{}.png".format(img_counter)
+                    img_name = "face_{}.jpg".format(img_counter)
                     cv2.imwrite("Faces/" + img_name, gray)
 
-<<<<<<< Updated upstream
-                   # imageDAO.saveImage(img_name, frame)
-=======
-                    self.imageDAO.saveImage(frame)
->>>>>>> Stashed changes
+                    img = cv2.imencode('.jpg', gray)[1].tostring()
 
-                    self.mqtt.publish(frame, str(dt.datetime.now()),
+                    self.imageDAO.saveImage(img)
+                    self.mqtt.publish(img, str(dt.datetime.now()),
                                       numberOfRecognition)
                     img_counter += 1
                     timer = None
-                    log.info("img: " + img_name + " at " +
-                             str(dt.datetime.now()))
                     print("picture taken")
 
             if len(faces) == 0:

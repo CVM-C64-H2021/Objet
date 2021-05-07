@@ -17,7 +17,7 @@ class imageDAO():
 
     def saveImage(self, image):
         infoImage = {}
-        infoImage[str(self.get_next_id())] = base64.b64encode(image).decode("utf-8")
+        infoImage[str(self.get_next_id())] = base64.b64encode(image)
         self.collection.insert_one(infoImage)
 
     def getAllImages(self):
