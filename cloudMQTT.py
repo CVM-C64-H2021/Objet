@@ -36,7 +36,6 @@ class ConnectionMQTT():
         faceDict["date"] = date
         faceDict["type"] = "image"
         faceDict["valeur"] = str(base64.b64encode(image))
-        faceDict["alerte"] = 1
 
         if numberOfRecognition < 2:
             faceDict["alerte"] = 0
