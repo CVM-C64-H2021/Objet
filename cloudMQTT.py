@@ -44,7 +44,7 @@ class ConnectionMQTT():
             faceDict["alerte"] = 1
             faceDict["valeur"] = str(base64.b64encode(image))
             faceDict["messageAlerte"] = "Cette personne a voulu manger vos biscuits!!! C'est la " + \
-                str(numberOfRecognition + 1) + "eme fois!!! &#127850"
+                str(numberOfRecognition + 1) + "eme fois!!!"
         print(faceDict["messageAlerte"])
         message = json.dumps(faceDict)
 
