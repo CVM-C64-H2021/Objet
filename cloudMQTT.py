@@ -35,13 +35,14 @@ class ConnectionMQTT():
         faceDict["idApp"] = 456
         faceDict["date"] = date
         faceDict["type"] = "image"
-        faceDict["valeur"] = str(base64.b64encode(image))
 
         if numberOfRecognition < 2:
             faceDict["alerte"] = 0
+            faceDict["valeur"] = ""
             faceDict["messageAlerte"] = "Tout est beau, commandant"
         else:
             faceDict["alerte"] = 1
+            faceDict["valeur"] = str(base64.b64encode(image))
             faceDict["messageAlerte"] = "Cette personne a voulu manger vos biscuits!!! C'est la " + \
                 str(numberOfRecognition + 1) + "eme fois!!! &#127850"
         print(faceDict["messageAlerte"])
