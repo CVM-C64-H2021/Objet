@@ -87,7 +87,7 @@ class FaceDetect:
                 timerCounter = dt.datetime.now()
                 diff = timerCounter - timer
 
-                if diff.seconds >= 10.0:
+                if diff.seconds >= 5.0:
 
                     dsize = (320, 240)
                     # resize image
